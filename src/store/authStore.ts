@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { authApi } from '@/lib/api/auth';
+import { toast } from 'sonner';
 
 export interface User {
   id: string;
@@ -60,11 +61,15 @@ export const useAuthStore = create<AuthState>()(
             isAuthenticated: true,
             isLoading: false,
           });
+
+          // Show success toast
+          toast.success(`Welcome back, ${user.first_name}!`);
         } catch (error: any) {
           set({
             error: error.response?.data?.message || 'Login failed',
             isLoading: false,
           });
+          // Error toast is handled by API interceptor
           throw error;
         }
       },
@@ -79,11 +84,15 @@ export const useAuthStore = create<AuthState>()(
             isAuthenticated: true,
             isLoading: false,
           });
+
+          // Show success toast
+          toast.success('Account created successfully! Welcome aboard!');
         } catch (error: any) {
           set({
             error: error.response?.data?.message || 'Registration failed',
             isLoading: false,
           });
+          // Error toast is handled by API interceptor
           throw error;
         }
       },
@@ -91,8 +100,11 @@ export const useAuthStore = create<AuthState>()(
       logout: async () => {
         try {
           await authApi.logout();
+          toast.success('Logged out successfully');
         } catch (error) {
           console.error('Logout error:', error);
+          // Still show success message even if API call fails
+          toast.success('Logged out successfully');
         } finally {
           set({
             user: null,
