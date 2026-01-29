@@ -6,19 +6,23 @@ import { useAuthStore } from '@/store/authStore';
 
 export default function Home() {
   const router = useRouter();
-  const { isAuthenticated, isLoading } = useAuthStore();
+  const { user, isAuthenticated, isLoading } = useAuthStore();
 
   useEffect(() => {
     if (!isLoading) {
-      if (isAuthenticated) {
-        // If logged in, redirect to dashboard or shop
-        router.push('/dashboard');
+      if (isAuthenticated && user) {
+        // Redirect based on user role
+        if (user.role === 'admin') {
+          router.push('/admin/products');
+        } else {
+          router.push('/products');
+        }
       } else {
         // If not logged in, redirect to login
         router.push('/login');
       }
     }
-  }, [isAuthenticated, isLoading, router]);
+  }, [isAuthenticated, isLoading, user, router]);
 
   // Show loading spinner while checking auth
   return (
