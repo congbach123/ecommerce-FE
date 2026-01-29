@@ -100,17 +100,32 @@ export function OrderReview() {
               </p>
             </div>
           </label>
-          <label className="flex items-center gap-3 p-3 border rounded-lg cursor-not-allowed opacity-50">
+          <label className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
             <input
               type="radio"
               name="payment"
               value="stripe"
-              disabled
+              checked={paymentMethod === 'stripe'}
+              onChange={() => setPaymentMethod('stripe')}
               className="w-4 h-4"
             />
             <div>
-              <p className="font-medium">Credit Card (Stripe)</p>
-              <p className="text-sm text-muted-foreground">Coming soon</p>
+              <p className="font-medium">Credit Card</p>
+              <p className="text-sm text-muted-foreground">Pay securely with Stripe</p>
+            </div>
+          </label>
+          <label className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+            <input
+              type="radio"
+              name="payment"
+              value="vnpay"
+              checked={paymentMethod === 'vnpay'}
+              onChange={() => setPaymentMethod('vnpay')}
+              className="w-4 h-4"
+            />
+            <div>
+              <p className="font-medium">VNPay</p>
+              <p className="text-sm text-muted-foreground">Bank transfer / QR payment</p>
             </div>
           </label>
         </div>

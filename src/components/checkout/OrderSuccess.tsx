@@ -1,12 +1,22 @@
 'use client';
 
+import { useEffect } from 'react';
 import Link from 'next/link';
-import { CheckCircle } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { CheckCircle, CreditCard } from 'lucide-react';
 import { useCheckoutStore } from '@/store/checkoutStore';
 import { Button } from '@/components/ui/button';
 
 export function OrderSuccess() {
-  const { order, reset } = useCheckoutStore();
+  const router = useRouter();
+  const { order, paymentMethod, reset } = useCheckoutStore();
+
+  // Redirect to payment page for non-COD orders
+  useEffect(() => {
+    if (order && (paymentMethod === 'stripe' || paymentMethod === 'vnpay')) {
+      router.push(`/checkout/payment?orderId=${order.id}`);
+    }
+  }, [order, paymentMethod, router]);
 
   if (!order) {
     return (
@@ -19,6 +29,22 @@ export function OrderSuccess() {
     );
   }
 
+  // Show loading while redirecting for non-COD
+  if (paymentMethod === 'stripe' || paymentMethod === 'vnpay') {
+    return (
+      <div className="text-center py-8">
+        <div className="mb-6">
+          <CreditCard className="w-16 h-16 text-gray-400 mx-auto animate-pulse" />
+        </div>
+        <h2 className="text-xl font-semibold mb-2">Redirecting to Payment...</h2>
+        <p className="text-muted-foreground">
+          Please wait while we redirect you to complete your payment.
+        </p>
+      </div>
+    );
+  }
+
+  // COD order success
   return (
     <div className="text-center py-8">
       <div className="mb-6">
@@ -42,7 +68,7 @@ export function OrderSuccess() {
           </div>
           <div className="flex justify-between">
             <span className="text-muted-foreground">Payment Method</span>
-            <span className="font-medium capitalize">{order.payment_method}</span>
+            <span className="font-medium">Cash on Delivery</span>
           </div>
           <div className="flex justify-between">
             <span className="text-muted-foreground">Status</span>
@@ -68,3 +94,4 @@ export function OrderSuccess() {
     </div>
   );
 }
+
