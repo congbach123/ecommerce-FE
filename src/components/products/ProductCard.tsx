@@ -5,12 +5,14 @@ import Image from 'next/image';
 import { Product } from '@/lib/api/products';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { useCartStore } from '@/store/cartStore';
 
 interface ProductCardProps {
   product: Product;
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const { addItem, isLoading } = useCartStore();
   const primaryImage = product.images?.find((img) => img.is_primary) || product.images?.[0];
   const price = Number(product.price);
   const comparePrice = product.compare_price ? Number(product.compare_price) : null;
@@ -18,6 +20,12 @@ export function ProductCard({ product }: ProductCardProps) {
   const discountPercent = hasDiscount
     ? Math.round(((comparePrice - price) / comparePrice) * 100)
     : 0;
+
+  const handleAddToCart = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    await addItem(product.id);
+  };
 
   return (
     <div className="group relative rounded-lg border bg-card overflow-hidden hover:shadow-lg transition-shadow">
@@ -89,11 +97,13 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* Add to Cart Button */}
         <Button
           className="w-full mt-3"
-          disabled={product.stock_quantity === 0}
+          disabled={product.stock_quantity === 0 || isLoading}
+          onClick={handleAddToCart}
         >
-          {product.stock_quantity === 0 ? 'Out of Stock' : 'Add to Cart'}
+          {product.stock_quantity === 0 ? 'Out of Stock' : isLoading ? 'Adding...' : 'Add to Cart'}
         </Button>
       </div>
     </div>
   );
 }
+

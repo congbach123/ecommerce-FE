@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { CartButton } from '@/components/cart/CartButton';
+import { CartDrawer } from '@/components/cart/CartDrawer';
 
 export function Header() {
   const router = useRouter();
@@ -71,6 +73,9 @@ export function Header() {
               Products
             </Link>
 
+            {/* Cart Button */}
+            <CartButton />
+
             {isAuthenticated ? (
               <>
                 {user?.role === 'admin' && (
@@ -100,6 +105,9 @@ export function Header() {
           </nav>
         </div>
       </div>
+
+      {/* Cart Drawer */}
+      <CartDrawer />
     </header>
   );
 }

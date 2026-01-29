@@ -4,6 +4,7 @@ import { productsApi } from '@/lib/api/products';
 import { ProductGallery } from '@/components/products/ProductGallery';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { AddToCartButton } from '@/components/cart/AddToCartButton';
 
 interface ProductDetailPageProps {
   params: Promise<{
@@ -98,13 +99,11 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
             {/* Actions */}
             <div className="space-y-3">
-              <Button
-                size="lg"
-                className="w-full"
+              <AddToCartButton
+                productId={product.id}
                 disabled={product.stock_quantity === 0}
-              >
-                Add to Cart
-              </Button>
+                className="w-full"
+              />
               <Button size="lg" variant="outline" className="w-full">
                 Add to Wishlist
               </Button>
