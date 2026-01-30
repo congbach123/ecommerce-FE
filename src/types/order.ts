@@ -68,6 +68,12 @@ export interface Order {
   updated_at: string;
   items: OrderItem[];
   shipping_address?: ShippingAddress;
+  user?: {
+    id: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+  };
 }
 
 // Paginated orders response
