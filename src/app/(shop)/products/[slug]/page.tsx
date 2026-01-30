@@ -5,6 +5,8 @@ import { ProductGallery } from '@/components/products/ProductGallery';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { AddToCartButton } from '@/components/cart/AddToCartButton';
+import { ProductReviews } from '@/components/reviews/ProductReviews';
+import { ProductWishlistButton } from '@/components/wishlist/ProductWishlistButton';
 
 interface ProductDetailPageProps {
   params: Promise<{
@@ -104,9 +106,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                 disabled={product.stock_quantity === 0}
                 className="w-full"
               />
-              <Button size="lg" variant="outline" className="w-full">
-                Add to Wishlist
-              </Button>
+              <ProductWishlistButton productId={product.id} />
             </div>
 
             {/* Category */}
@@ -125,6 +125,9 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
             )}
           </div>
         </div>
+
+        {/* Reviews Section */}
+        <ProductReviews productId={product.id} />
       </div>
     );
   } catch (error) {
