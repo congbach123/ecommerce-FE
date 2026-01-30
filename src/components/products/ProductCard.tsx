@@ -6,6 +6,7 @@ import { Product } from '@/lib/api/products';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useCartStore } from '@/store/cartStore';
+import { WishlistButton } from '@/components/wishlist/WishlistButton';
 
 interface ProductCardProps {
   product: Product;
@@ -54,6 +55,11 @@ export function ProductCard({ product }: ProductCardProps) {
             {hasDiscount && (
               <Badge variant="destructive">-{discountPercent}%</Badge>
             )}
+          </div>
+
+          {/* Wishlist Button */}
+          <div className="absolute top-2 right-2">
+            <WishlistButton productId={product.id} size="sm" />
           </div>
 
           {/* Out of stock overlay */}
